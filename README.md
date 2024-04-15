@@ -1,3 +1,7 @@
+## Django start project
+
+`django-admin startproject config <folder name>` : 현재 폴더는 `.`
+
 ## Poetry (virtual environment)
 
 `poetry init`
