@@ -1,33 +1,12 @@
-class Human:
+class Dog:
     def __init__(self, name):
         self.name = name
 
-    def say_hello(self):
-        print(f"hello my name is {self.name}")
+    def __str__(self):
+        return f"my name is {self.name} woof~ woof!"
 
 
-class Player(Human):
-    def __init__(self, name, xp):
-        super().__init__(name)
-        self.xp = xp
+jia = Dog("jia")
+print(jia)
 
-    def say_hello(self):
-        super().say_hello()
-        print(f"And my xp is {self.xp}")
-
-
-class Fan(Human):
-    def __init__(self, name, fav_team):
-        super().__init__(name)
-        self.fav_team = fav_team
-
-    def favorite_team(self):
-        print(self.fav_team)
-
-
-bigPerson_player = Player("bigPerson_player", 1000)
-bigPerson_player.say_hello()
-
-bigPerson_fan = Fan("bigPerson_fan", "Arsenal")
-bigPerson_fan.say_hello()
-bigPerson_fan.favorite_team()
+print(dir(jia))
