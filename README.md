@@ -3,9 +3,14 @@
 <b>start server</b> `python manage.py runserver`
 <b>quit server</b> `ctrl + c`
 <b>first migration</b> `python manage.py migrate`
-<b>create admin</b> `python manage.py createsuperuser`
 
 > migration file is just <b>python file</b> that <b>modifies shape of database</b>
+
+<b>create admin</b> `python manage.py createsuperuser`
+<b>create application</b> `python mangage.py startapp <application name>`
+
+> config/settings.py의 `INSTALLED_APPS`안에 생성한 application 추가
+> ex)`"houses.apps.HousesConfig"`
 
 ## Django start project
 
