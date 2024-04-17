@@ -12,6 +12,11 @@
 > config/settings.py의 `INSTALLED_APPS`안에 생성한 application 추가
 > ex)`"houses.apps.HousesConfig"`
 
+> `models.py, admin.py` 입력 후 아래와 같이 db에 적용
+
+<b> make migration</b> `python manage.py makemigrations`
+<b>migration</b> `python manage.py migrate`
+
 ## Django start project
 
 `django-admin startproject config <folder name>` 현재 폴더는 `.`
