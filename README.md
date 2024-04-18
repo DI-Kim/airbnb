@@ -1,3 +1,7 @@
+## Django
+
+!!!warning 튜플안의 value가 하나일 때는 뒤에 `,`를 제대로 찍지 않으면 적용이 안된다.
+
 ## django server
 
 <b>start server</b> `python manage.py runserver`
