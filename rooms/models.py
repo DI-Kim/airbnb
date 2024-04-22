@@ -51,6 +51,9 @@ class Room(CommonModel):
         blank=True,
     )
 
+    def total_amenities(self):
+        return self.amenities.count()
+
     def __str__(self):
         return self.name
 
