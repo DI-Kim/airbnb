@@ -7,5 +7,18 @@
   </head>
   <body>
     <h1>{{title}}</h1>
+    <ul>
+      {% for room in rooms %}
+      <li>
+        <a href="/rooms/{{room.pk}}">
+          <h3>{{room.name}}</h3>
+          <br />
+          {% for amenity in room.amenities.all %}
+          <span>{{amenity.name}}<br /></span>
+          {% endfor %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
   </body>
 </html>
