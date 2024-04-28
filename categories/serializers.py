@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import Category
 
 
 class CategorySerializer(serializers.Serializer):
@@ -7,7 +8,15 @@ class CategorySerializer(serializers.Serializer):
         required=True,
         max_length=50,
     )
-    kind = serializers.CharField(
-        max_length=15,
+    kind = serializers.ChoiceField(
+        choices=Category.CategoryKindChoices.choices,
     )
     created_at = serializers.DateTimeField(read_only=True)
+
+    # **validation_data는
+    # {"name": "Category from DRF", "kind": "rooms"} 딕셔너리를
+    # name='Category from DRF'
+    # kind='rooms'
+    # 로 바꿔줌
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)
