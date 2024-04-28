@@ -22,7 +22,7 @@ class CategorySerializer(serializers.Serializer):
         return Category.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        # get 은 {} 에서 쓰이는 메소드로 첫번째 parameter를 key로 찾지 못하면 두번째 parameter의 값을 반환
+        # get 은 {} 에서 쓰이는 메소드로 첫번째 parameter를 key로 찾지 못하면 두번째 parameter의 값을 반환(django가 아닌 python문법)
         instance.name = validated_data.get("name", instance.name)
         instance.kind = validated_data.get("kind", instance.kind)
         instance.save()
