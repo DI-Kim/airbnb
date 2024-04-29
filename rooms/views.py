@@ -128,6 +128,35 @@ class RoomDetail(APIView):
         serializer = RoomDetailSerializer(room)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        room = self.get_object(pk)
+        if not request.user.is_authenticated:
+            raise NotAuthenticated
+        if room.owner != request.user:
+            raise PermissionDenied
+        # challenge
+        serializer = RoomDetailSerializer(
+            room,
+            request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            amenities = request.data.get("amenities")
+            if amenities != None:
+                updated_amenities = []
+                for amenity_pk in amenities:
+                    amenity = Amenity.objects.get(pk=amenity_pk)
+                    if not amenity:
+                        raise ParseError("Amenity not found")
+                    updated_amenities.append(amenity)
+
+            updated_room = serializer.save(amenities=updated_amenities)
+            return Response(
+                RoomDetailSerializer(updated_room).data,
+            )
+        else:
+            return Response(serializer.errors)
+
     def delete(self, request, pk):
         room = self.get_object(pk)
         if not request.user.is_authenticated:
