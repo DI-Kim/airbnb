@@ -5,6 +5,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from .models import Amenity, Room
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
 from categories.models import Category
+from django.db import transaction
 
 
 class Amenities(APIView):
@@ -83,29 +84,27 @@ class Rooms(APIView):
                 # 카테고리가 존재하지 않으면 raise error
                 except Category.DoesNotExist:
                     raise ParseError("Category not found")
+                # transation.atomic 안에 있는 변경사항들은 모든 변경사항이 ok되거나 no되거나 둘 중 하나이다. 만약 no라면 모든 변경사항은 없어진다.(room을 만들기 전으로)
+                try:
+                    with transaction.atomic():
+                        #! save()안에 파라미터를 넣어주면, serializer에서 create 함수의 validated_data 파라미터에 포함된다.(이는 put에서 불러오는 update 함수도 마찬가지)
+                        room = serializer.save(
+                            #! user
+                            owner=request.user,
+                            category=category,
+                        )
 
-                #! save()안에 파라미터를 넣어주면, serializer에서 create 함수의 validated_data 파라미터에 포함된다.(이는 put에서 불러오는 update 함수도 마찬가지)
-                room = serializer.save(
-                    #! user
-                    owner=request.user,
-                    category=category,
-                )
+                        #! amenities
+                        # ManyToManyField와 Foriegn Key와는 저장(삭제) 방법이 다르다.
+                        amenities = request.data.get("amenities")
+                        for amenity_pk in amenities:
+                            amenity = Amenity.objects.get(pk=amenity_pk)
+                            room.amenities.add(amenity)
 
-                #! amenities
-                # ManyToManyField와 Foriegn Key와는 저장(삭제) 방법이 다르다.
-                # amenities를 추가하기 전에 이미 방은 만들어진다. amenity에 문제가 발생하면 parseError로 이후의 모든 amenity가 저장이 안되는데 이에 대한 해결책
-                # 1. 문제가 있는 amenity만 제외하고 저장한다.
-                # 2. 룸을 삭제하고(room.delete() user가 처음부터 다시 방을 만들도록 시킨다.
-                amenities = request.data.get("amenities")
-                for amenity_pk in amenities:
-                    try:
-                        amenity = Amenity.objects.get(pk=amenity_pk)
-                    except Amenity.DoesNotExist:
-                        raise ParseError(f"Amenity with pk {amenity_pk} not found")
-                    room.amenities.add(amenity)
-
-                serializer = RoomDetailSerializer(room)
-                return Response(serializer.data)
+                        serializer = RoomDetailSerializer(room)
+                        return Response(serializer.data)
+                except Exception:
+                    raise ParseError("Amenity not found")
             else:
                 return Response(serializer.errors)
         else:
