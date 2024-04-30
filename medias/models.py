@@ -4,7 +4,7 @@ from common.models import CommonModel
 
 # Create your models here.
 class Photo(CommonModel):
-    file = models.ImageField()
+    file = models.URLField()
     description = models.CharField(
         max_length=140,
     )
@@ -28,7 +28,7 @@ class Photo(CommonModel):
 
 
 class Video(CommonModel):
-    file = models.FileField()
+    file = models.URLField()
     # OneToOneField는 ForiegnKey와 비슷하지만, 여러개를 가질 수 있는 ForiegnKey와는 다르게 한개만 가질 수 있다. (unique, 고유한 관계)
     experience = models.OneToOneField(
         "experiences.Experience",
