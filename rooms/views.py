@@ -142,6 +142,7 @@ class RoomDetail(APIView):
         )
         if serializer.is_valid():
             amenities = request.data.get("amenities")
+            updated_room = None
             if amenities != None:
                 updated_amenities = []
                 for amenity_pk in amenities:
@@ -149,8 +150,11 @@ class RoomDetail(APIView):
                     if not amenity:
                         raise ParseError("Amenity not found")
                     updated_amenities.append(amenity)
+                updated_room = serializer.save(amenities=updated_amenities)
 
-            updated_room = serializer.save(amenities=updated_amenities)
+            if not updated_room:
+                updated_room = serializer.save()
+
             return Response(
                 RoomDetailSerializer(updated_room).data,
             )
