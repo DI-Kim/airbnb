@@ -26,3 +26,21 @@ class PrivateUserSerializer(ModelSerializer):
             "groups",
             "user_permissions",
         )
+
+
+class PublicUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        exclude = (
+            "password",
+            "is_staff",
+            "is_active",
+            "first_name",
+            "last_name",
+            "groups",
+            "user_permissions",
+            "is_superuser",
+            "id",
+        )
+
+    # code challenge (add reviews, rooms)
