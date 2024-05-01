@@ -22,6 +22,20 @@ class CreateRoomBookingSerializer(serializers.ModelSerializer):
         else:
             return value
 
+    def validate(self, data):
+        if data["check_out"] <= data["check_in"]:
+            raise serializers.ValidationError(
+                "Check in should be smaller than check out"
+            )
+        if Booking.objects.filter(
+            check_in__lt=data["check_out"],
+            check_out__gt=data["check_in"],
+        ).exists():
+            raise serializers.ValidationError(
+                "Those (or some) of those dates are already taken."
+            )
+        return data
+
     class Meta:
         model = Booking
         fields = (
