@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 CUSTOM_APPS = [
@@ -154,5 +155,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         # 이름만 넣으면 로그인 해주는 fake authentication
         "config.authentication.TrustMeBroAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ]
 }
