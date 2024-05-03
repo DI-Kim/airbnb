@@ -147,3 +147,12 @@ MEDIA_ROOT = "uploads"
 MEDIA_URL = "user-uploads/"
 
 PAGE_SIZE = 5
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # django에서 사용하는 기존의 authentication
+        "rest_framework.authentication.SessionAuthentication",
+        # 이름만 넣으면 로그인 해주는 fake authentication
+        "config.authentication.TrustMeBroAuthentication",
+    ]
+}
