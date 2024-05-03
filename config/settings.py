@@ -156,5 +156,6 @@ REST_FRAMEWORK = {
         # 이름만 넣으면 로그인 해주는 fake authentication
         "config.authentication.TrustMeBroAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "config.authentication.JWTAuthentication",
     ]
 }
