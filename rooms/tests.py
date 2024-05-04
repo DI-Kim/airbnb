@@ -78,6 +78,8 @@ class TestAmenities(APITestCase):
 class TestAmenity(APITestCase):
     NAME = "Test Amenity"
     DESC = "Test Desc"
+    NEW_NAME = "Modified amenity name"
+    NEW_DESC = "Modified amenity Desc."
     URL = "/api/v1/rooms/amenities/1"
     WRONG_URL = "/api/v1/rooms/amenities/12"
 
@@ -101,10 +103,31 @@ class TestAmenity(APITestCase):
         self.assertEqual(data["description"], self.DESC)
 
     def test_put_amenity(self):
-        # code challenge
-        # serializer가 유효해서 유저가 업데이트 할 수 있는 경우
-        # 유효하지 않을 경우
-        pass
+        # test case 1: 수정 사항 없음
+        response = self.client.put(self.URL)
+        data = response.json()
+        self.assertEqual(data["name"], self.NAME)
+        self.assertEqual(data["description"], self.DESC)
+
+        # test case 2: 이름 수정
+        response = self.client.put(self.URL, data={"name": self.NEW_NAME})
+        data = response.json()
+        self.assertEqual(data["name"], self.NEW_NAME)
+        self.assertEqual(data["description"], self.DESC)
+
+        # test case 3: 설명 수정
+        response = self.client.put(self.URL, data={"description": self.NEW_DESC})
+        data = response.json()
+        self.assertEqual(data["name"], self.NEW_NAME)
+        self.assertEqual(data["description"], self.NEW_DESC)
+
+        # test case 4: 이름, 설명 수정
+        response = self.client.put(
+            self.URL, data={"name": self.NAME, "description": self.DESC}
+        )
+        data = response.json()
+        self.assertEqual(data["name"], self.NAME)
+        self.assertEqual(data["description"], self.DESC)
 
     def test_delete_amenity(self):
         response = self.client.delete(self.URL)
@@ -128,4 +151,4 @@ class TestRoom(APITestCase):
         self.client.force_login(self.user)
 
         response = self.client.post("/api/v1/rooms/")
-        print(response.json())
+        # print(response.json())
